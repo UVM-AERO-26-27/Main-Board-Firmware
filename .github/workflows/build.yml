@@ -1,0 +1,24 @@
+name: Build and test
+
+# What to trigger for
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+# What jobs to run when one of the triggers is activated
+jobs:
+    build:
+        runs-on: ubuntu-latest #Fresh linux cloud machine
+        steps:
+        - uses: actions/checkout@v7 #Downloads this repo onto machine
+        - uses: actions/setup-python@v7 #installs python for platform io
+          with:
+            python-version: "3.11"
+        - name: Install PlatformIO #installs platform io
+          run: pip install platformio
+        - name: Build firmware 
+          run: pio run -e esp32s3
+        - name: Run tests
+          run: pio test -e native
