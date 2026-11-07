@@ -15,16 +15,51 @@ This section defines the behaviors which must happen at boot
 ## Task Definitions
 This sections outlines the tasks to be created which will be used by the MCU in the main loop
 
-* `REQ_TASK_001`: Task 1 shall send a check and recieve a response from all other boards on CAN shall check any fault signals recieved from Vicor and BMS/IMD fault pins
-* `REQ_TASK_002`: Task 2 shall be control (highest priority, fixed rate, every 10 ms TBD): runs the state machine, works out torque, and sends the command to the DTI.
-* `REQ_TASK_003`: Task 3 shall be CAN receive (high priority): waits for incoming messages and stores the latest values from the BMS, DTI and Pac-Man and when they were last heard from.
-* `REQ_TASK_004`: Task 4 shall be I/O (lower priority): reads the buttons and brake pressure, and drives the buzzer, fans, pumps and lights.
-* `REQ_TASK_005`: Task 5 shall be supervisor (lowest priority): resets the external watchdog, but only after every other task has checked in.
+* `REQ_TASK_001`: Control Task (highest priority, fixed rate, every 10 ms TBD): runs the state machine, works out torque, and sends the command to the DTI.
+* `REQ_TASK_002`: CAN Receive Task (high priority): waits for incoming messages and stores the latest values from the BMS, DTI and Pac-Man and when they were last heard from.
+* `REQ_TASK_003`: I/O Task (lower priority): reads the buttons and brake pressure, and drives the buzzer, fans, pumps and lights.
+* `REQ_TASK_004`: Supervisor Task (lowest priority): resets the external watchdog, but only after every other task has checked in.
+
 
 ## System state 0
-This section outlines the state 0 behaviors of the system state machine.
+This section outlines the state 0 behaviors of the system state machine. MCU checking and fault checking
 
 * `REQ_SS0_001`: State 0 shall consider startup conditions met when every required board heard from within X ms (TBD), fault lines inactive, and the shutdown loop closed (TBD)
-* `REQ_SS0_002`: The system state shall not leave state 0 unless Task 1 and 2 and fulfilled entirely
+* `REQ_SS0_002`: The system state shall not leave state 0 until there are no faults and each board has been heard from.
 
-TODO: Seperate out CAN TX AND RXX into their own tasks
+## System state 1
+This section outlines the state 1 behaviors of the system state machine. Precharge sequence control
+
+* `REQ_SS1_001`: State 1 shall not send a CAN to Pac-Man unless no faults are active, and all boards have been heard from.
+* `REQ_SS1_002`: State 1 shall send a CAN command to the Pac-Man to intiate the precharge sequence and start a running timer.
+* `REQ_SS1_003`: State 1 shall immediately terminate action if the timer exceeds limit of TBD
+* `REQ_SS1_004`: Should the timer exceed the limit, state 1 shall return to state 0 immediately
+* `REQ_SS1_005`: The state machine shall return to state 0 if any fault arises send zero torque and disable inverter 
+
+
+## System state 2
+This section outlines the state 2 behaviors of the system state machine. Process enabling inverter
+
+* `REQ_SS2_001`: The shall not send a CAN command to enable inverter until Pac-Man reports that precharge is done.
+* `REQ_SS2_002`: The Vicor Enable wire shall be set to VICOR_EN (HIGH)
+* `REQ_SS2_003`: Start button shall be ready to send a enable command to the inverter once the precharge is successful
+* `REQ_SS2_004`: Within less than 1 second of pressing start, a lamp check must be preformed for less than 2 seconds
+* `REQ_SS2_005`: The state machine shall return to state 0 if any fault arises send zero torque and disable inverter
+
+## System state 3
+This section outlines the state 2 behaviors of the system state machine. Ready to drive
+
+* `REQ_SS3_001`: Upon the start button being pressed, it shall act only on the moment the button goes from released to pressed and send a CAN command to enable the inverter .
+* `REQ_SS3_002`: When the inverter is enabled there must be a PWM sent to the Ready-to-Drive buzzer for 1 to 3 seconds, at 1000 to 3500 Hz and at least 80 dBA, and no similar sound at any other time
+* `REQ_SS3_003`: While the inverter is enabled, to send a torque command, pedal 0/1 shall agree within TBD to send a torque command on CAN
+* `REQ_SS3_004`: The state machine shall return to state 0 if any fault arises send zero torque and disable inverter
+
+
+State 2 shall be entered when Pac-Man reports the main contactors closed. Whether Pac-Man closes them automatically or on a TSMCU command: TBD
+
+
+
+
+
+
+
