@@ -1,15 +1,22 @@
 # Firmware Requirements Specification
 
+## System Requirements
+This represents the system wide functions that need to happen at any given state
+
+* `REQ_SYS_001`: In any given state, the TSMCU shall send a CAN heartbeat message out on the bus.
+
+
 ## Boot Sequence
 This section defines the behaviors which must happen at boot
 
-* `REQ_BOOT_001`: Upon recieving power, the TSCMU shall drive dangerous outputs (VICOR_EN, RTD_BUZZER, PRECHARGE, MAIN_CONTACT) low as first action of startup
+* `REQ_BOOT_001`: Upon recieving power, the TSMCU shall drive dangerous outputs (VICOR_EN, RTD_BUZZER, PRECHARGE, MAIN_CONTACT) low as first action of startup
 * `REQ_BOOT_002`: the TSCMU shall configure all other pins (except CAN TX/RX) to be used
 * `REQ_BOOT_003`: The MCU shall initialize the TWAI "Two wire automotive interface" (CAN) driver.
-* `REQ_BOOT_004`: The CAN/TWAI driver shall be initialized with fixed baud rate of TBD
+* `REQ_BOOT_004`: The CAN/TWAI driver shall be initialized with fixed baud rate of 500kbit/s
 * `REQ_BOOT_005`: If the TWAI controller driver fails to allocate or start, the system shall keep outputs safe, the car shall remain in State 0, and the fault is shown TBD
 * `REQ_BOOT_006`: The system state shall be initialized to kTractiveSystemOff (state 0)
 * `REQ_BOOT_007`: The tasks shall be created from their functions for the program to run
+* `REQ_BOOT008` : All listed warning lights shall all turn on together within 1 second of power-up, stay on for 2–3 seconds, then turns off. Mark who drives it as TBD. Shall not be blocking
 
 
 ## Task Definitions
@@ -49,13 +56,14 @@ This section outlines the state 2 behaviors of the system state machine. Process
 ## System state 3
 This section outlines the state 2 behaviors of the system state machine. Ready to drive
 
-* `REQ_SS3_001`: Upon the start button being pressed, it shall act only on the moment the button goes from released to pressed and send a CAN command to enable the inverter .
-* `REQ_SS3_002`: When the inverter is enabled there must be a PWM sent to the Ready-to-Drive buzzer for 1 to 3 seconds, at 1000 to 3500 Hz and at least 80 dBA, and no similar sound at any other time
+* `REQ_SS3_001`: Upon the start button being pressed, it shall act only on the moment the button is pressed (edge detection) and a CAN command will send to enable the inverter.
+* `REQ_SS3_002`: When the inverter is enabled there must be a HIGH sent to the Ready-to-Drive buzzer for 1 to 3 seconds, at 1000 to 3500 Hz and at least 80 dBA, and no similar sound at any other time
 * `REQ_SS3_003`: While the inverter is enabled, to send a torque command, pedal 0/1 shall agree within TBD to send a torque command on CAN
-* `REQ_SS3_004`: The state machine shall return to state 0 if any fault arises send zero torque and disable inverter
+* `REQ_SS3_004`: While in state 3, if the start button is pressed, the system shall return to state 2.
+* `REQ_SS3_005`: If the two pedal sensors disagree, the TSMCU shall command zero torque to the inverter
+* `REQ_SS3_006`: The state machine shall return to state 0 if any fault arises send zero torque and disable inverter
 
 
-State 2 shall be entered when Pac-Man reports the main contactors closed. Whether Pac-Man closes them automatically or on a TSMCU command: TBD
 
 
 
