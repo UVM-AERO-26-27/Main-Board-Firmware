@@ -1,3 +1,9 @@
+# Main Board Firmware (TSMCU)
+
+Firmware for the tractive system microcontroller (TSMCU), the master controller on the UVM Alternative Energy Racing Organization (AERO) car. It steps the high-voltage system from off, through precharge, to ready to drive, coordinating the other boards over the tractive CAN bus.
+
+Status: requirements and design. See requirements.md and rules_ref.md.
+
 ## Dev Environments
 
 - Multiple environments ultized through PlatformIO. This allows for Testing Firmware Locally on your computer.
