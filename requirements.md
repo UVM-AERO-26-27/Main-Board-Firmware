@@ -45,8 +45,7 @@ This section outlines the state 1 behaviors of the system state machine. **Prech
 
 
 ## System state 2
-This section outlines the state 2 behaviors of the system state machine. **Process enabling inverter
-**
+This section outlines the state 2 behaviors of the system state machine. **Process enabling inverter**
 * `REQ_SS2_001`: The TSMCU shall not send a CAN command to enable inverter until Pac-Man reports that precharge is done.
 * `REQ_SS2_002`: The Vicor Enable wire shall be set to VICOR_EN (HIGH)
 * `REQ_SS2_003`: Start button shall be ready to send a enable command to the inverter once the precharge is successful

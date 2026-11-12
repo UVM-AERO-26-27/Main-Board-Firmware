@@ -31,8 +31,3 @@
 
 // --- State Machine Inputs ---
 #define PIN_START_BUTTON    8
-
-// --- State Machine Outputs ---
-#define PIN_PRECHARGE_RELAY 15
-#define PIN_MAIN_RELAY      16
-#define PIN_STATUS_LED      18
