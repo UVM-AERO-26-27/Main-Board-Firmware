@@ -30,17 +30,17 @@ constexpr PinSetup kBootPins[] = {
 void test_pin_init() {
     TEST_ASSERT_TRUE(kBootPins[0].mode == BootMode::kOutput);
     TEST_ASSERT_TRUE(kBootPins[1].mode == BootMode::kInput);
-    TEST_ASSERT_TRUE(kBootPins[1].mode == BootMode::kInput);
-    TEST_ASSERT_TRUE(kBootPins[1].mode == BootMode::kInput);
-    TEST_ASSERT_TRUE(kBootPins[1].mode == BootMode::kInput);
-    TEST_ASSERT_TRUE(kBootPins[1].mode == BootMode::kInput);
-    TEST_ASSERT_TRUE(kBootPins[1].mode == BootMode::kOutput);
-    TEST_ASSERT_TRUE(kBootPins[1].mode == BootMode::kOutput);
-    TEST_ASSERT_TRUE(kBootPins[1].mode == BootMode::kOutput);
-    TEST_ASSERT_TRUE(kBootPins[1].mode == BootMode::kInput);
-    TEST_ASSERT_TRUE(kBootPins[1].mode == BootMode::kInput);
-    TEST_ASSERT_TRUE(kBootPins[1].mode == BootMode::kInput);
-    TEST_ASSERT_TRUE(kBootPins[1].mode == BootMode::kInput);
+    TEST_ASSERT_TRUE(kBootPins[2].mode == BootMode::kInput);
+    TEST_ASSERT_TRUE(kBootPins[3].mode == BootMode::kInput);
+    TEST_ASSERT_TRUE(kBootPins[4].mode == BootMode::kInput);
+    TEST_ASSERT_TRUE(kBootPins[5].mode == BootMode::kInput);
+    TEST_ASSERT_TRUE(kBootPins[6].mode == BootMode::kOutput);
+    TEST_ASSERT_TRUE(kBootPins[7].mode == BootMode::kOutput);
+    TEST_ASSERT_TRUE(kBootPins[8].mode == BootMode::kOutput);
+    TEST_ASSERT_TRUE(kBootPins[9].mode == BootMode::kInput);
+    TEST_ASSERT_TRUE(kBootPins[10].mode == BootMode::kInput);
+    TEST_ASSERT_TRUE(kBootPins[11].mode == BootMode::kInput);
+    TEST_ASSERT_TRUE(kBootPins[12].mode == BootMode::kInput);
 }
 
 int main() {
